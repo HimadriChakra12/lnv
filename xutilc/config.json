@@ -1,0 +1,11 @@
+{
+	"dotfiles":	{
+		"repository":	"https://github.com/HimadriChakra12/.dotfiles.git",
+		"path":	"/home/himadri/.dotfiles"
+	},
+	"packages":	{
+		"base":	["nemo", "spotify", "wezterm", "qimgv"],
+		"dev":	["github-cli", "lazygit", "neovim"],
+		"utility":	["htop", "rhythmbox"]
+	}
+}
