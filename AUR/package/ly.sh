@@ -3,9 +3,6 @@
 # Exit on error
 set -e
 
-# Remove GNOME and GDM
-sudo pacman -Rs --noconfirm gnome gdm
-
 # Install ly display manager
 sudo pacman -S --noconfirm ly
 
