@@ -12,5 +12,5 @@ sudo systemctl enable ly.service
 # Optionally, start ly immediately (uncomment if desired)
 # sudo systemctl start ly.service
 
-echo "Gnome and GDM removed. Ly installed and enabled."
+echo "Ly installed and enabled."
 
