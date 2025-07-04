@@ -10,6 +10,3 @@ packages=(
 )
 
 yay -S --noconfirm "${packages[@]}"
-
-
-

@@ -14,37 +14,52 @@ cd ~/temp/yay
 makepkg -si
 echo "Installed yay...."
 
-echo "Getting Dotfiles"
-git clone https://github.com/HimadriChakra12/.dotfiles.git ~/.dotfiles
-
-echo "Linking Dotfiles"
-jq -c '.[]' "$HOME/.dotfiles/dotfiles.json" | while read -r item; do
-  name=$(jq -r '.name' <<< "$item")
-  source=$(jq -r '.source' <<< "$item")
-  target=$(jq -r '.target' <<< "$item")
-
-  echo "Linking $name..."
-  ln -sf "$HOME/$source" "$(eval echo "$target")"
-done
-
-echo "Installer...."
-declare -A INSTALLERS=(
-  [yay]="yay -S --noconfirm"
-  [npm]="npm install -g"
-  [pip]="pip install"
-  [cargo]="cargo install"
+echo "Installing Packages"
+packages=(
+    "qimgv"
+    "ranger"
+    "curl"
+    "nemo"
+    "rust"
+    "mpv"
+    "qemu"
+    "spotify"
+    "github-cli"
+    "lazygit"
+    "neovim"
+    "jdownloader2"
+    "qbittorrent"
+    "tmux"
+    "i3"
 )
 
-for manager in "${!INSTALLERS[@]}"; do
-  packages=($(jq -r --arg mgr "$manager" '.[$mgr][]?' "$CONFIG"))
-  
-  if [[ ${#packages[@]} -gt 0 ]]; then
-    if ! command -v "$manager" &>/dev/null; then
-      echo "$manager not installed."
-      continue
-    fi
-    echo "Installing ${#packages[@]} packages with $manager..."
-    ${INSTALLERS[$manager]} "${packages[@]}"
-  fi
+langs=(
+    "rust"
+    "cmake"
+    "make"
+    "gcc"
+    "golang"
+)
+yay -S --noconfirm "${packages[@]}"
+
+
+dotfiles=(
+  "$HOME/.dotfiles/i3:$HOME/.config/i3"
+  "$HOME/.dotfiles/gh:$HOME/.config/gh"
+  "$HOME/.dotfiles/mpv:$HOME/.config/mpv"
+  "$HOME/.dotfiles/nvim:$HOME/.config/nvim"
+  "$HOME/.dotfiles/qimgv:$HOME/.config/qimgv"
+  "$HOME/.dotfiles/wezterm:$HOME/.config/wezterm"
+  "$HOME/.dotfiles/.bashrc:$HOME/.bashrc"
+  "$HOME/.dotfiles/.tmux.conf:$HOME/.tmux.conf"
+)
+
+echo "Linking dotfiles..."
+for entry in "${dotfiles[@]}"; do
+  src="${entry%%:*}"
+  tgt="${entry##*:}"
+  echo "Linking $src → $tgt"
+  ln -sf "$src" "$tgt"
 done
+
 
