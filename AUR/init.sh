@@ -16,6 +16,7 @@ echo "Installed yay...."
 
 echo "Installing Packages"
 packages=(
+    "firefox"
     "qimgv"
     "ranger"
     "curl"
@@ -40,7 +41,9 @@ langs=(
     "gcc"
     "golang"
 )
+
 yay -S --noconfirm "${packages[@]}"
+yay -S --noconfirm "${langs[@]}"
 
 
 dotfiles=(
