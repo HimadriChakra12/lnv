@@ -1,5 +1,9 @@
 mkdir ~/temp
 
+sudo pacman -S --noconfirm ly
+sudo systemctl enable ly.service
+echo "Ly installed and enabled."
+
 sudo pacman -S --needed base-devel git
 
 echo "Installing pikaur...."
@@ -15,25 +19,7 @@ makepkg -si
 echo "Installed yay...."
 
 echo "Installing Packages"
-packages=(
-    "firefox"
-    "qimgv"
-    "ranger"
-    "curl"
-    "nemo"
-    "rust"
-    "mpv"
-    "qemu"
-    "spotify"
-    "github-cli"
-    "lazygit"
-    "neovim"
-    "jdownloader2"
-    "qbittorrent"
-    "tmux"
-    "i3"
-)
-
+echo "Language Captain"
 langs=(
     "rust"
     "cmake"
@@ -41,9 +27,38 @@ langs=(
     "gcc"
     "golang"
 )
+echo "Shell"
+shell=(
+    "ranger"
+    "curl"
+    "github-cli"
+    "lazygit"
+    "neovim"
+    "tmux"
+)
+echo "i3"
+i3=(
+    "i3"
+    "dunst"
+    "rofi"
+)
+echo "Suppliments"
+packages=(
+    "nemo"
+    "firefox"
+    "qimgv"
+    "mpv"
+    "qemu"
+    "spotify"
+    "jdownloader2"
+    "qbittorrent"
+)
 
-yay -S --noconfirm "${packages[@]}"
+
 yay -S --noconfirm "${langs[@]}"
+yay -S --noconfirm "${shell[@]}"
+yay -S --noconfirm "${i3[@]}"
+yay -S --noconfirm "${packages[@]}"
 
 
 dotfiles=(
@@ -64,5 +79,6 @@ for entry in "${dotfiles[@]}"; do
   echo "Linking $src → $tgt"
   ln -sf "$src" "$tgt"
 done
+
 
 
