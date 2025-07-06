@@ -6,17 +6,25 @@ echo "Ly installed and enabled."
 
 sudo pacman -S --needed base-devel git
 
-echo "Installing pikaur...."
-git clone https://aur.archlinux.org/pikaur.git ~/temp/pikaur
-cd ~/temp/pikaur
-makepkg -fsri
-echo "Installed pikaur...."
+if command -v pikaur >/dev/null; then
+    echo "pikaur is already installed."
+else
+    echo "pikaur is not installed. Installing..."
+    git clone https://aur.archlinux.org/pikaur.git ~/temp/pikaur
+    cd ~/temp/pikaur
+    makepkg -fsri --noconfirm
+    echo "Installed pikaur"
+fi
 
-echo "Installing yay...."
-git clone https://aur.archlinux.org/yay-bin.git ~/temp/yay
-cd ~/temp/yay
-makepkg -si
-echo "Installed yay...."
+if command -v yay >/dev/null; then
+    echo "yay is already installed."
+else
+    echo "yay is not installed. Installing..."
+    git clone https://aur.archlinux.org/yay-bin.git ~/temp/yay
+    cd ~/temp/yay
+    makepkg -si --noconfirm
+    echo "Installed yay"
+fi
 
 echo "Installing Packages"
 langs=(
@@ -34,8 +42,56 @@ shell=(
     "neovim"
     "tmux"
     "cat"
+    "unzip"
 )
 i3=(
+    "wezterm"
+    "acpi"
+    "arandr"
+    "arc-gtk-theme-eos"
+    "archlinux-xdg-menu"
+    "awesome-terminal-fonts"
+    "dex"
+    "dmenu"
+    "dunst"
+    "eos-settings-i3wm"
+    "endeavouros-xfce4-terminal-colors"
+    "eos-lightdm-slick-theme"
+    "eos-qogir-icons"
+    "feh"
+    "galculator"
+    "gvfs"
+    "gvfs-afc"
+    "gvfs-gphoto2"
+    "gvfs-mtp"
+    "gvfs-nfs"
+    "gvfs-smb"
+    "i3-wm"
+    "i3blocks"
+    "i3lock"
+    "i3status"
+    "jq"
+    "nwg-look"
+    "mpv"
+    "network-manager-applet"
+    "numlockx"
+    "playerctl"
+    "polkit-gnome"
+    "rofi"
+    "scrot"
+    "sysstat"
+    "thunar-volman"
+    "tumbler"
+    "unzip"
+    "xarchiver"
+    "xbindkeys"
+    "xdg-user-dirs-gtk"
+    "xed"
+    "xfce4-terminal"
+    "xorg-xbacklight"
+    "xorg-xdpyinfo"
+    "xss-lock"
+    "zip"
     "xorg-server"
     "xorg-xinit"
     "xorg-xauth"
