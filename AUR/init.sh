@@ -19,7 +19,6 @@ makepkg -si
 echo "Installed yay...."
 
 echo "Installing Packages"
-echo "Language Captain"
 langs=(
     "rust"
     "cmake"
@@ -27,7 +26,6 @@ langs=(
     "gcc"
     "golang"
 )
-echo "Shell"
 shell=(
     "ranger"
     "curl"
@@ -35,14 +33,23 @@ shell=(
     "lazygit"
     "neovim"
     "tmux"
+    "cat"
 )
-echo "i3"
 i3=(
-    "i3"
+    "xorg-server"
+    "xorg-xinit"
+    "xorg-xauth"
+    "xorg-xrandr"
+    "xorg-fonts-misc"
+    "xorg-xsetroot"
+    "xterm"
+    "i3-wm"
+    "i3status"
+    "dmenu"
+    "ly"
     "dunst"
     "rofi"
 )
-echo "Suppliments"
 packages=(
     "nemo"
     "firefox"
@@ -55,11 +62,17 @@ packages=(
 )
 
 
+echo "Language Captain"
 yay -S --noconfirm "${langs[@]}"
+echo "Shell"
 yay -S --noconfirm "${shell[@]}"
+echo "i3"
 yay -S --noconfirm "${i3[@]}"
+echo "Suppliments"
 yay -S --noconfirm "${packages[@]}"
 
+echo "Init Spot-X Bash"
+bash <(curl -sSL https://spotx-official.github.io/run.sh)
 
 dotfiles=(
   "$HOME/.dotfiles/i3:$HOME/.config/i3"
@@ -79,6 +92,82 @@ for entry in "${dotfiles[@]}"; do
   echo "Linking $src → $tgt"
   ln -sf "$src" "$tgt"
 done
+
+echo "Creating ~/.xinitrc if missing..."
+if [ ! -f ~/.xinitrc ]; then
+  echo "exec i3" > ~/.xinitrc
+  echo "~/.xinitrc created with 'exec i3'"
+else
+  echo "~/.xinitrc already exists. Make sure it has 'exec i3'"
+fi
+
+#!/bin/bash
+
+echo "Creating local .desktop entries if missing..."
+
+mkdir -p ~/.local/share/applications
+
+# firefox.desktop
+if [ ! -f ~/.local/share/applications/firefox.desktop ]; then
+  echo "Creating firefox.desktop..."
+  cat > ~/.local/share/applications/firefox.desktop <<EOF
+[Desktop Entry]
+Name=Firefox
+Exec=firefox %u
+Type=Application
+Icon=firefox
+Terminal=false
+Categories=Network;WebBrowser;
+MimeType=x-scheme-handler/http;x-scheme-handler/https;
+StartupNotify=true
+EOF
+fi
+
+# nemo.desktop
+if [ ! -f ~/.local/share/applications/nemo.desktop ]; then
+  echo "Creating nemo.desktop..."
+  cat > ~/.local/share/applications/nemo.desktop <<EOF
+[Desktop Entry]
+Name=Nemo
+Exec=nemo %U
+Type=Application
+Icon=folder
+Terminal=false
+Categories=System;FileTools;FileManager;
+MimeType=inode/directory;
+EOF
+fi
+
+echo "Setting default applications..."
+
+# Browser
+xdg-settings set default-web-browser firefox.desktop
+echo "Firefox set as default browser"
+
+# Qimgv as image viewer
+echo "Setting Qimgv as default image viewer..."
+for mime in image/jpeg image/png image/gif image/webp image/svg+xml; do
+  xdg-mime default qimgv.desktop "$mime"
+done
+
+# MPV as video player
+echo "Setting MPV as default video player..."
+for mime in video/mp4 video/x-matroska video/x-msvideo video/webm; do
+  xdg-mime default mpv.desktop "$mime"
+done
+
+# Rhythmbox as music player
+echo "Setting Rhythmbox as default music player..."
+for mime in audio/mpeg audio/x-wav audio/ogg audio/flac; do
+  xdg-mime default rhythmbox.desktop "$mime"
+done
+
+# Nemo as file manager
+xdg-mime default nemo.desktop inode/directory
+xdg-settings set default-file-manager nemo.desktop
+echo "Nemo set as default file manager"
+
+echo "All defaults configured successfully!"
 
 
 
